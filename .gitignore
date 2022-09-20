@@ -1,0 +1,8 @@
+.cpcache
+.idea/
+.nrepl*
+*.iml
+.clj-kondo/
+.calva/
+.lsp/
+.vscode/
