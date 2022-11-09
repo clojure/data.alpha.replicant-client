@@ -1,12 +1,12 @@
 (ns data.replicant.client.spi
-  (:require [data.rds.protocols :as p]
+  (:require [data.replicant.client.protocols :as p]
             [clojure.core.protocols :as corep])
   (:import [clojure.lang IDeref]
            [java.io Writer]))
 
 (deftype Relay [rid remote]
-  IDeref
-  (deref [this] this)
+  #_IDeref
+  #_(deref [this] this)
 
   p/IRelay
   (relay-seq [this]
@@ -36,3 +36,16 @@
   [rid remote]
   (->Relay rid remote))
 
+(comment
+
+  (require '[clojure.pprint :as pp])
+
+  (str
+   (binding []
+     (pp/with-pprint-dispatch pp/code-dispatch
+       (with-out-str
+         (pp/pprint
+          (relay (java.util.UUID/randomUUID) nil)
+          )))))
+
+)

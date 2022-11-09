@@ -1,7 +1,7 @@
 (ns data.replicant.client.reader
   (:require
    [data.replicant.client.spi :as spi]
-   [data.rds :as rds])
+   [data.replicant.client.rds :as rds])
   (:import
     [clojure.lang MapEntry]))
 
