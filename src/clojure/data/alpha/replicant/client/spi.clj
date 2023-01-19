@@ -1,5 +1,5 @@
-(ns data.replicant.client.spi
-  (:require [data.replicant.client.protocols :as p]
+(ns clojure.data.alpha.replicant.client.spi
+  (:require [clojure.data.alpha.replicant.client.protocols :as p]
             [clojure.core.protocols :as corep])
   (:import [clojure.lang IDeref]
            [java.io Writer]))

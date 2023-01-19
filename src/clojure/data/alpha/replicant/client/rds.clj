@@ -1,7 +1,7 @@
-(ns data.replicant.client.rds
+(ns clojure.data.alpha.replicant.client.rds
   (:require
     [clojure.core.protocols :as corep]
-    [data.replicant.client.protocols :as p])
+    [clojure.data.alpha.replicant.client.protocols :as p])
   (:import
     [java.io Writer]
     [java.util Collection Map]

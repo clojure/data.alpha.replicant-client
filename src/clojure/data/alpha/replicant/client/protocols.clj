@@ -1,4 +1,4 @@
-(ns data.replicant.client.protocols)
+(ns clojure.data.alpha.replicant.client.protocols)
 
 (defprotocol IRemote
   (remote-fetch
