@@ -49,3 +49,9 @@
   "Read '#r/fn {:id id}' and return an IFn"
   [{:keys [id] :as m}]
   (rds/remote-fn (rid-reader id)))
+
+(defn object-reader
+  "Read '#r/object {:klass c, :ref rid}' and return a map describing the object"
+  [{:keys [klass ref] :as m}]
+  {:class klass
+   :ref   ref})
