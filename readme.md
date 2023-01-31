@@ -1,65 +1,46 @@
-# Replicant
+# replicant-client
 
-`replicant` is a library for remote implementations of the Clojure
-data structures and a remote REPL server hosted over prepl.
+A Clojure a library providing client-side implementations of Clojure datastructures served by [replicant-server](https://github.com/clojure/replicant-server).
 
 ## Rationale
 
-TODO
+While the ability to connect to Clojure REPLs over a wire is a powerful lever for programmers, the transport of data-structures can bog down an active connection. Replicant works to avoid sending data over the wire until it's requested. "Large" data structures (via length or depth) are "remotified" - stored in a cache on the server, passed as a remote reference. When more data is needed, replicant-client interacts with replicant-server to retrieve more data.
 
-## Usage
+## Docs
 
-### Standalone server
+* [API](https://clojure.github.io/replicant-client)
+* [Reference](https://clojure.org/reference/replicant)
 
-To run a standalone replicant socket server from this repo:
+# Release Information
 
-```shell
-clj -X data.replicant.server.prepl/start-remote-replicant
-```
+Latest release:
 
-You can pass additional arguments from [start-server](https://clojure.github.io/clojure/clojure.core-api.html#clojure.core.server/start-server) on the command line.
+[deps.edn](https://clojure.org/reference/deps_and_cli) dependency information:
 
-### Adding to existing app
-
-Add the replicant dep to your app:
+As a git dep:
 
 ```clojure
-io.github.cognitect-labs/replicant {:git/sha "cef24742a2bcdfb070a3b3bf8106dbe2dcb5a332"}
-```
+io.github.clojure/replicant-client {:git/tag "vTODO" :git/sha "TODO"}
+``` 
 
-And then call:
+# Developer Information
 
-```clojure
-(require '[data.replicant.server.prepl :as pr])
-(pr/start-remote-replicant)
-```
+[![Tests](https://github.com/clojure/replicant-client/actions/workflows/ci.yml/badge.svg)](https://github.com/clojure/replicant-client/actions/workflows/ci.yml)
 
-Also takes map of options (or kwargs in Clojure 1.11+) ala [start-server](https://clojure.github.io/clojure/clojure.core-api.html#clojure.core.server/start-server), defaults to port 5555.
+* [GitHub project](https://github.com/clojure/replicant-client)
+* [How to contribute](https://clojure.org/community/contributing)
+* [Bug Tracker](https://clojure.atlassian.net/browse/RCLIENT)
 
-## Connecting Morse
+# Copyright and License
 
-Check out the Morse repo:
+Copyright © 2023 Rich Hickey and contributors
 
-```shell
-# checkout
-git clone git@github.com:cognitect-labs/rebl.git
-cd rebl
+All rights reserved. The use and
+distribution terms for this software are covered by the
+[Eclipse Public License 1.0] which can be found in the file
+epl-v10.html at the root of this distribution. By using this software
+in any fashion, you are agreeing to be bound by the terms of this
+license. You must not remove this notice, or any other, from this
+software.
 
-# switch to Morse branch
-git checkout morse
-
-# start (also takes `:port 5555` etc)
-clj -A:dev:jfx -X cognitect.rebl/morse
-```
-
-Once you connect, the REPL pane in Morse is a remote client of the server (via a socket) of the server you started above. Expressions you type there are evaluated in the replicant server process. This is just like any remote socket-based repl.
-
-"Large" data structures (via length or depth) are "remotified" - stored in a cache on the server, passed as a remote reference (you may see this get printed in some places in Morse as #l/id #uuid ...), then used inside Morse via remote implementations of the persistent collection interfaces. When more data is needed, a call is made internally over the remote connection to retrieve more data. This is transparent to Morse - it is just using Clojure data.
-
-Tap and out stream on the server also show up in Morse, as usual.
-
-## Copyright and License
-
-Copyright © 2022 Cognitect
-
-Licensed under the Eclipse Public License, Version 2.0
+[Eclipse Public License 1.0]: http://opensource.org/licenses/eclipse-1.0.php
