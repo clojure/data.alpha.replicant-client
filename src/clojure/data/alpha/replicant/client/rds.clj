@@ -4,12 +4,43 @@
     [clojure.data.alpha.replicant.client.protocols :as p])
   (:import
     [java.io Writer]
-    [java.util Collection Map]
+    [java.util Collection Map Map$Entry]
     [clojure.lang IDeref Seqable Associative ILookup Sequential Indexed Counted IFn
                   IMeta IPersistentCollection IPersistentStack IPersistentMap IPersistentSet
-                  IPersistentVector ArityException]))
+                  IPersistentVector ArityException MapEquivalence]))
 
 (set! *warn-on-reflection* true)
+
+(defn- rds-equiv-sequential
+  [x y]
+  (boolean
+   (when (sequential? y)
+     (loop [xs (seq x) ys (seq y)]
+       (cond (nil? xs) (nil? ys)
+             (nil? ys) false
+             (= (first xs) (first ys)) (recur (next xs) (next ys))
+             :else false)))))
+
+(deftype NeverEquiv []
+  IPersistentCollection
+  (equiv [_ _] false))
+
+(def ^:private never-equiv (NeverEquiv.))
+
+(defn- rds-equiv-map
+  [x y]
+  (boolean
+   (when (map? y)
+     (when (== (count x) (count y))
+       (every? identity
+               (map (fn [xkv]
+                      (= (get y (first xkv) never-equiv)
+                         (second xkv)))
+                    x))))))
+
+(defn- rds-equiv-set
+  [x y]
+  (every? #(contains? x %) y))
 
 (defn remote-seq
   "Read '#r/seq {:head [h e a d] :rest rid} and return a seq"
@@ -30,6 +61,12 @@
   IPersistentCollection
   (count [this] count)
   (empty [this] [])
+  (equiv [this other]
+    (if (instance? clojure.lang.PersistentVector other)
+      (if (== count (clojure.core/count other))
+        (rds-equiv-sequential this other)
+        false)
+      (rds-equiv-sequential this other)))
 
   ILookup
   (valAt [this k] (val (.entryAt this k)))
@@ -60,10 +97,10 @@
       (val e)
       not-found))
   (applyTo [this args]
-    (condp = (count args)
+    (condp = (clojure.core/count args)
       1 (.invoke this (nth args 0))
       2 (.invoke this (nth args 0) (nth args 1))
-      (throw (ArityException. (count args) "RemoteVector"))))
+      (throw (ArityException. (clojure.core/count args) "RemoteVector"))))
 
   Iterable
   (iterator [this] (clojure.lang.SeqIterator. (seq this))))
@@ -84,6 +121,8 @@
   IPersistentCollection
   (count [this] count)
   (empty [this] {})
+  (equiv [this other]
+    (rds-equiv-map this other))
 
   ILookup
   (valAt [this k] (val (.entryAt this k)))
@@ -92,11 +131,17 @@
 
   IPersistentMap
 
+  MapEquivalence
+
   Iterable
   (iterator [this] (clojure.lang.SeqIterator. (seq this)))
 
   Map
   (size [this] count)
+  (get [this k]
+    (let [^Map$Entry e (.entryAt this k)]
+      (when e
+        (.getValue e))))
 
   IMeta
   (meta [this] metadata)
@@ -108,10 +153,10 @@
             (val e)
             not-found))
   (applyTo [this args]
-           (condp = (count args)
+           (condp = (clojure.core/count args)
              1 (.invoke this (nth args 0))
              2 (.invoke this (nth args 0) (nth args 1))
-             (throw (ArityException. (count args) "RemoteMap")))))
+             (throw (ArityException. (clojure.core/count args) "RemoteMap")))))
 
 (defn remote-map
   [relay count metadata]
@@ -125,6 +170,10 @@
   IPersistentCollection
   (count [this] count)
   (empty [this] #{})
+  (equiv [this other]
+    (and (set? other)
+         (== (clojure.core/count this) (clojure.core/count other))
+         (rds-equiv-set this other)))
 
   Collection
   (size [this] count)
