@@ -85,6 +85,10 @@
   IPersistentStack
   (peek [this]
     (when (pos? count) (.valAt this (dec count))))
+  (pop [this]
+    (cond (zero? count) (throw (IllegalStateException. "Can't pop empty vector"))
+          (== count 1)  []
+          (pos? count)  (vec (butlast this))))
 
   Indexed
   (nth [this n] (.valAt this n))
