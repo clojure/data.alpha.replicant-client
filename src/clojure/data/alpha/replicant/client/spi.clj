@@ -18,6 +18,8 @@
     (p/remote-hashcode remote this))
   (relay-cons [this elem]
     (p/remote-cons remote this elem))
+  (relay-assoc [this k v]
+    (p/remote-assoc remote this k v))
 
   Object
   (toString [this]

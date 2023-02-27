@@ -30,7 +30,10 @@
 (defprotocol IRemoteWrite
   (remote-cons
     [this rid elem]
-    "Cons the object elem to the collection for rid"))
+    "Cons the object elem to the collection for rid")
+  (remote-assoc
+    [this rid k v]
+    "Assoc the value v to the collection for rid at key k."))
 
 (defprotocol IRelay
   ;; Read side
@@ -40,4 +43,5 @@
   (relay-hasheq [this] "Get hasheq of the object refered to by rid")
   (relay-hashcode [this] "Get hashCode of the object refered to by rid")
   ;; Write side
-  (relay-cons [this elem] "Cons the object elem to the collection for rid"))
+  (relay-cons [this elem] "Cons the object elem to the collection for rid")
+  (relay-assoc [this k v] "Assoc the value v to the collection for rid at key k."))

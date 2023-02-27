@@ -56,6 +56,7 @@
   Associative
   (containsKey [this k] (boolean (.entryAt this k)))
   (entryAt [this k] (p/relay-entry relay k))
+  (assoc [this k v] (p/relay-assoc relay k v))
 
   Seqable
   (seq [this] (p/relay-seq relay))
@@ -140,6 +141,7 @@
   Associative
   (containsKey [this k] (boolean (.entryAt this k)))
   (entryAt [this k] (p/relay-entry relay k))
+  (assoc [this k v] (p/relay-assoc relay k v))
 
   Seqable
   (seq [this] (p/relay-seq relay))
