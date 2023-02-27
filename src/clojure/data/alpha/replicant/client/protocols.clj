@@ -27,9 +27,17 @@
   (remote-hashcode [this rid]
     "Fetch the hashCode of the object refered to by rid"))
 
+(defprotocol IRemoteWrite
+  (remote-cons
+    [this rid elem]
+    "Cons the object elem to the collection for rid"))
+
 (defprotocol IRelay
+  ;; Read side
   (relay-seq [this] "Get seq of remote object")
   (relay-entry [this k] "Get entry of remote object")
   (relay-apply [this args] "Apply remote object with args")
   (relay-hasheq [this] "Get hasheq of the object refered to by rid")
-  (relay-hashcode [this] "Get hashCode of the object refered to by rid"))
+  (relay-hashcode [this] "Get hashCode of the object refered to by rid")
+  ;; Write side
+  (relay-cons [this elem] "Cons the object elem to the collection for rid"))

@@ -69,6 +69,8 @@
         (rds-eq-sequential this other #(clojure.lang.Util/equiv %1 %2))
         false)
       (rds-eq-sequential this other #(clojure.lang.Util/equiv %1 %2))))
+  (cons [this elem]
+    (p/relay-cons relay elem))
 
   ILookup
   (valAt [this k] (val (.entryAt this k)))
@@ -147,6 +149,8 @@
   (empty [this] {})
   (equiv [this other]
     (rds-eq-map this other #(clojure.lang.Util/equiv %1 %2)))
+  (cons [this elem]
+    (p/relay-cons relay elem))
 
   ILookup
   (valAt [this k] (val (.entryAt this k)))
@@ -216,6 +220,8 @@
     (and (set? other)
          (== (clojure.core/count this) (clojure.core/count other))
          (rds-eq-set this other)))
+  (cons [this elem]
+    (p/relay-cons relay elem))
 
   Collection
   (size [this] count)

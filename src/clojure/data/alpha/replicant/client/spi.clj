@@ -16,6 +16,8 @@
     (p/remote-hasheq remote this))
   (relay-hashcode [this]
     (p/remote-hashcode remote this))
+  (relay-cons [this elem]
+    (p/remote-cons remote this elem))
 
   Object
   (toString [this]
