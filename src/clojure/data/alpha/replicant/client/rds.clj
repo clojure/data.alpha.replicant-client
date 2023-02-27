@@ -235,6 +235,7 @@
   IPersistentSet
   (contains [this k] (boolean (p/relay-entry relay k)))
   (get [this k] (val (p/relay-entry relay k)))
+  (disjoin [this k] (p/relay-disj relay k))
 
   IMeta
   (meta [this] metadata)

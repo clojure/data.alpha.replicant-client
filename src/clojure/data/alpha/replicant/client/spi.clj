@@ -22,6 +22,8 @@
     (p/remote-assoc remote this k v))
   (relay-dissoc [this k]
     (p/remote-dissoc remote this k))
+  (relay-disj [this k]
+    (p/remote-disj remote this k))
 
   Object
   (toString [this]

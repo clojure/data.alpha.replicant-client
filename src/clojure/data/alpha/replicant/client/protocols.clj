@@ -36,7 +36,10 @@
     "Assoc the value v to the collection for rid at key k.")
   (remote-dissoc
     [this rid k]
-    "Dissoc the key k from the collection for rid."))
+    "Dissoc the key k from the collection for rid.")
+  (remote-disj
+    [this rid k]
+    "Disj the key k from the collection for rid."))
 
 (defprotocol IRelay
   ;; Read side
@@ -48,4 +51,5 @@
   ;; Write side
   (relay-cons [this elem] "Cons the object elem to the collection for rid")
   (relay-assoc [this k v] "Assoc the value v to the collection for rid at key k.")
-  (relay-dissoc [this k] "Dissoc the key k from the collection for rid."))
+  (relay-dissoc [this k] "Dissoc the key k from the collection for rid.")
+  (relay-disj [this k] "Disj the key k from the collection for rid."))
