@@ -21,24 +21,26 @@
              (eq-fun (first xs) (first ys)) (recur (next xs) (next ys))
              :else false)))))
 
-(deftype NeverEquiv []
+(deftype NeverEq []
   IPersistentCollection
-  (equiv [_ _] false))
+  (equiv [_ _] false)
+  Object
+  (equals [_ _] false))
 
-(def ^:private never-equiv (NeverEquiv.))
+(def ^:private never-eq (NeverEq.))
 
-(defn- rds-equiv-map
-  [x y]
+(defn- rds-eq-map
+  [x y eq-fun]
   (boolean
    (when (map? y)
      (when (== (count x) (count y))
        (every? identity
                (map (fn [xkv]
-                      (= (get y (first xkv) never-equiv)
-                         (second xkv)))
+                      (eq-fun (get y (first xkv) never-eq)
+                              (second xkv)))
                     x))))))
 
-(defn- rds-equiv-set
+(defn- rds-eq-set
   [x y]
   (every? #(contains? x %) y))
 
@@ -144,7 +146,7 @@
   (count [this] count)
   (empty [this] {})
   (equiv [this other]
-    (rds-equiv-map this other))
+    (rds-eq-map this other #(clojure.lang.Util/equiv %1 %2)))
 
   ILookup
   (valAt [this k] (val (.entryAt this k)))
@@ -194,7 +196,9 @@
       _hashcode
       (let [hc (p/relay-hashcode relay)]
         (set! _hashcode hc)
-        _hashcode))))
+        _hashcode)))
+  (equals [this other]
+    (rds-eq-map this other #(clojure.lang.Util/equals %1 %2))))
 
 (defn remote-map
   [relay count metadata]
@@ -211,7 +215,7 @@
   (equiv [this other]
     (and (set? other)
          (== (clojure.core/count this) (clojure.core/count other))
-         (rds-equiv-set this other)))
+         (rds-eq-set this other)))
 
   Collection
   (size [this] count)
@@ -239,7 +243,11 @@
       _hashcode
       (let [hc (p/relay-hashcode relay)]
         (set! _hashcode hc)
-        _hashcode))))
+        _hashcode)))
+  (equals [this other]
+    (and (set? other)
+         (== (clojure.core/count this) (clojure.core/count other))
+         (rds-eq-set this other))))
 
   ;;IFn
   ;;Iterable
