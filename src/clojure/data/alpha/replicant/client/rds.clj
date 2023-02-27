@@ -160,6 +160,8 @@
   Counted
 
   IPersistentMap
+  (without [this k]
+    (p/relay-dissoc relay k))
 
   MapEquivalence
 

@@ -20,6 +20,8 @@
     (p/remote-cons remote this elem))
   (relay-assoc [this k v]
     (p/remote-assoc remote this k v))
+  (relay-dissoc [this k]
+    (p/remote-dissoc remote this k))
 
   Object
   (toString [this]
