@@ -11,14 +11,14 @@
 
 (set! *warn-on-reflection* true)
 
-(defn- rds-equiv-sequential
-  [x y]
+(defn- rds-eq-sequential
+  [x y eq-fun]
   (boolean
    (when (sequential? y)
      (loop [xs (seq x) ys (seq y)]
        (cond (nil? xs) (nil? ys)
              (nil? ys) false
-             (= (first xs) (first ys)) (recur (next xs) (next ys))
+             (eq-fun (first xs) (first ys)) (recur (next xs) (next ys))
              :else false)))))
 
 (deftype NeverEquiv []
@@ -64,9 +64,9 @@
   (equiv [this other]
     (if (instance? clojure.lang.PersistentVector other)
       (if (== count (clojure.core/count other))
-        (rds-equiv-sequential this other)
+        (rds-eq-sequential this other #(clojure.lang.Util/equiv %1 %2))
         false)
-      (rds-equiv-sequential this other)))
+      (rds-eq-sequential this other #(clojure.lang.Util/equiv %1 %2))))
 
   ILookup
   (valAt [this k] (val (.entryAt this k)))
@@ -119,7 +119,13 @@
       _hashcode
       (let [hc (p/relay-hashcode relay)]
         (set! _hashcode hc)
-        _hashcode))))
+        _hashcode)))
+  (equals [this other]
+    (if (instance? clojure.lang.PersistentVector other)
+      (if (== count (clojure.core/count other))
+        (rds-eq-sequential this other #(clojure.lang.Util/equals %1 %2))
+        false)
+      (rds-eq-sequential this other #(clojure.lang.Util/equals %1 %2)))))
 
 (defn remote-vector
   [relay count metadata]
