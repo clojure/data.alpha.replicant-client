@@ -50,7 +50,7 @@
       (seq [_] (p/relay-seq rest-relay)))))
 
 (deftype RemoteVector
-  [relay count metadata]
+  [relay count metadata ^:volatile-mutable hash-code]
   Associative
   (containsKey [this k] (boolean (.entryAt this k)))
   (entryAt [this k] (p/relay-entry relay k))
@@ -103,14 +103,30 @@
       (throw (ArityException. (clojure.core/count args) "RemoteVector"))))
 
   Iterable
-  (iterator [this] (clojure.lang.SeqIterator. (seq this))))
+  (iterator [this] (clojure.lang.SeqIterator. (seq this)))
+
+  Object
+  (hashCode [this]
+    (if hash-code
+      hash-code
+      (let [hc (p/relay-hash relay)]
+        (set! hash-code hc)
+        hash-code))))
+
+(comment
+  (def rv (remote-vector nil 1 {}))
+
+  (def rvv (RemoteVector. nil 111 {} nil))
+
+  (.hashCode rv)
+)
 
 (defn remote-vector
   [relay count metadata]
-  (->RemoteVector relay count metadata))
+  (->RemoteVector relay count metadata nil))
 
 (deftype RemoteMap
-  [relay count metadata]
+  [relay count metadata ^:volatile-mutable hash-code]
   Associative
   (containsKey [this k] (boolean (.entryAt this k)))
   (entryAt [this k] (p/relay-entry relay k))
@@ -156,14 +172,22 @@
            (condp = (clojure.core/count args)
              1 (.invoke this (nth args 0))
              2 (.invoke this (nth args 0) (nth args 1))
-             (throw (ArityException. (clojure.core/count args) "RemoteMap")))))
+             (throw (ArityException. (clojure.core/count args) "RemoteMap"))))
+
+  Object
+  (hashCode [this]
+    (if hash-code
+      hash-code
+      (let [hc (p/relay-hash relay)]
+        (set! hash-code hc)
+        hash-code))))
 
 (defn remote-map
   [relay count metadata]
-  (->RemoteMap relay count metadata))
+  (->RemoteMap relay count metadata nil))
 
 (deftype RemoteSet
-  [relay count metadata]
+  [relay count metadata ^:volatile-mutable hash-code]
   clojure.lang.Seqable
   (seq [this] (p/relay-seq relay))
 
@@ -185,14 +209,22 @@
   (get [this k] (val (p/relay-entry relay k)))
 
   IMeta
-  (meta [this] metadata))
+  (meta [this] metadata)
+
+  Object
+  (hashCode [this]
+    (if hash-code
+      hash-code
+      (let [hc (p/relay-hash relay)]
+        (set! hash-code hc)
+        hash-code))))
 
   ;;IFn
   ;;Iterable
   
 (defn remote-set
   [relay count metadata]
-  (->RemoteSet relay count metadata))
+  (->RemoteSet relay count metadata nil))
 
 (deftype RemoteFn
   [relay]

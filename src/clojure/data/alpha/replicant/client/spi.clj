@@ -5,9 +5,6 @@
            [java.io Writer]))
 
 (deftype Relay [rid remote]
-  #_IDeref
-  #_(deref [this] this)
-
   p/IRelay
   (relay-seq [this]
     (p/remote-seq remote this))
@@ -15,6 +12,8 @@
     (p/remote-entry remote this k))
   (relay-apply [this args]
     (p/remote-apply remote this args))
+  (relay-hash [this]
+    (p/remote-hash remote this))
 
   Object
   (toString [this]

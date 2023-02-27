@@ -1,6 +1,6 @@
 (ns clojure.data.alpha.replicant.client.protocols)
 
-(defprotocol IRemote
+(defprotocol IRemoteRead
   (remote-fetch
     [this rid]
     [this rid depth-opts]
@@ -21,9 +21,12 @@
     "Returns datafy of remote object for rid")
   (remote-apply
     [this rid args]
-    "Invoke remote function with args"))
+    "Invoke remote function with args")
+  (remote-hash [this rid]
+    "Fetch the hashCode of the object refered to by rid"))
 
 (defprotocol IRelay
   (relay-seq [this] "Get seq of remote object")
   (relay-entry [this k] "Get entry of remote object")
-  (relay-apply [this args] "Apply remote object with args"))
+  (relay-apply [this args] "Apply remote object with args")
+  (relay-hash [this] "Get hashCode of the object refered to by rid"))
