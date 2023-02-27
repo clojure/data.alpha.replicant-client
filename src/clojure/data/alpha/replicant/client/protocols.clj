@@ -22,11 +22,14 @@
   (remote-apply
     [this rid args]
     "Invoke remote function with args")
-  (remote-hash [this rid]
+  (remote-hasheq [this rid]
+    "Fetch the hasheq of the object refered to by rid")
+  (remote-hashcode [this rid]
     "Fetch the hashCode of the object refered to by rid"))
 
 (defprotocol IRelay
   (relay-seq [this] "Get seq of remote object")
   (relay-entry [this k] "Get entry of remote object")
   (relay-apply [this args] "Apply remote object with args")
-  (relay-hash [this] "Get hashCode of the object refered to by rid"))
+  (relay-hasheq [this] "Get hasheq of the object refered to by rid")
+  (relay-hashcode [this] "Get hashCode of the object refered to by rid"))

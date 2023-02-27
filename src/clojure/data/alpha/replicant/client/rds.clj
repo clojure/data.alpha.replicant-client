@@ -7,7 +7,7 @@
     [java.util Collection Map Map$Entry]
     [clojure.lang IDeref Seqable Associative ILookup Sequential Indexed Counted IFn
                   IMeta IPersistentCollection IPersistentStack IPersistentMap IPersistentSet
-                  IPersistentVector ArityException MapEquivalence]))
+                  IPersistentVector ArityException MapEquivalence IHashEq]))
 
 (set! *warn-on-reflection* true)
 
@@ -50,7 +50,7 @@
       (seq [_] (p/relay-seq rest-relay)))))
 
 (deftype RemoteVector
-  [relay count metadata ^:volatile-mutable hash-code]
+  [relay count metadata ^:volatile-mutable _hasheq ^:volatile-mutable _hashcode]
   Associative
   (containsKey [this k] (boolean (.entryAt this k)))
   (entryAt [this k] (p/relay-entry relay k))
@@ -105,28 +105,28 @@
   Iterable
   (iterator [this] (clojure.lang.SeqIterator. (seq this)))
 
+  IHashEq
+  (hasheq [this]
+    (if _hasheq
+      _hasheq
+      (let [he (p/relay-hasheq relay)]
+        (set! _hasheq he)
+        _hasheq)))
+
   Object
   (hashCode [this]
-    (if hash-code
-      hash-code
-      (let [hc (p/relay-hash relay)]
-        (set! hash-code hc)
-        hash-code))))
-
-(comment
-  (def rv (remote-vector nil 1 {}))
-
-  (def rvv (RemoteVector. nil 111 {} nil))
-
-  (.hashCode rv)
-)
+    (if _hashcode
+      _hashcode
+      (let [hc (p/relay-hashcode relay)]
+        (set! _hashcode hc)
+        _hashcode))))
 
 (defn remote-vector
   [relay count metadata]
-  (->RemoteVector relay count metadata nil))
+  (->RemoteVector relay count metadata nil nil))
 
 (deftype RemoteMap
-  [relay count metadata ^:volatile-mutable hash-code]
+  [relay count metadata ^:volatile-mutable _hasheq ^:volatile-mutable _hashcode]
   Associative
   (containsKey [this k] (boolean (.entryAt this k)))
   (entryAt [this k] (p/relay-entry relay k))
@@ -174,20 +174,28 @@
              2 (.invoke this (nth args 0) (nth args 1))
              (throw (ArityException. (clojure.core/count args) "RemoteMap"))))
 
+  IHashEq
+  (hasheq [this]
+    (if _hasheq
+      _hasheq
+      (let [he (p/relay-hasheq relay)]
+        (set! _hasheq he)
+        _hasheq)))
+
   Object
   (hashCode [this]
-    (if hash-code
-      hash-code
-      (let [hc (p/relay-hash relay)]
-        (set! hash-code hc)
-        hash-code))))
+    (if _hashcode
+      _hashcode
+      (let [hc (p/relay-hashcode relay)]
+        (set! _hashcode hc)
+        _hashcode))))
 
 (defn remote-map
   [relay count metadata]
-  (->RemoteMap relay count metadata nil))
+  (->RemoteMap relay count metadata nil nil))
 
 (deftype RemoteSet
-  [relay count metadata ^:volatile-mutable hash-code]
+  [relay count metadata ^:volatile-mutable _hasheq ^:volatile-mutable _hashcode]
   clojure.lang.Seqable
   (seq [this] (p/relay-seq relay))
 
@@ -211,20 +219,28 @@
   IMeta
   (meta [this] metadata)
 
+  IHashEq
+  (hasheq [this]
+    (if _hasheq
+      _hasheq
+      (let [he (p/relay-hasheq relay)]
+        (set! _hasheq he)
+        _hasheq)))
+
   Object
   (hashCode [this]
-    (if hash-code
-      hash-code
-      (let [hc (p/relay-hash relay)]
-        (set! hash-code hc)
-        hash-code))))
+    (if _hashcode
+      _hashcode
+      (let [hc (p/relay-hashcode relay)]
+        (set! _hashcode hc)
+        _hashcode))))
 
   ;;IFn
   ;;Iterable
   
 (defn remote-set
   [relay count metadata]
-  (->RemoteSet relay count metadata nil))
+  (->RemoteSet relay count metadata nil nil))
 
 (deftype RemoteFn
   [relay]

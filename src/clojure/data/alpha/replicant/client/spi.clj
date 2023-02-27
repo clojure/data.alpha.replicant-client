@@ -12,8 +12,10 @@
     (p/remote-entry remote this k))
   (relay-apply [this args]
     (p/remote-apply remote this args))
-  (relay-hash [this]
-    (p/remote-hash remote this))
+  (relay-hasheq [this]
+    (p/remote-hasheq remote this))
+  (relay-hashcode [this]
+    (p/remote-hashcode remote this))
 
   Object
   (toString [this]
