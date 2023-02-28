@@ -22,10 +22,15 @@
   (remote-apply
     [this rid args]
     "Invoke remote function with args")
-  (remote-hasheq [this rid]
+  (remote-hasheq
+    [this rid]
     "Fetch the hasheq of the object refered to by rid")
-  (remote-hashcode [this rid]
-    "Fetch the hashCode of the object refered to by rid"))
+  (remote-hashcode
+    [this rid]
+    "Fetch the hashCode of the object refered to by rid")
+  (remote-withmeta
+    [this rid metadata]
+    "Apply metadata to remote object refered to by rid and return new object."))
 
 (defprotocol IRemoteWrite
   (remote-cons
@@ -48,6 +53,7 @@
   (relay-apply [this args] "Apply remote object with args")
   (relay-hasheq [this] "Get hasheq of the object refered to by rid")
   (relay-hashcode [this] "Get hashCode of the object refered to by rid")
+  (relay-withmeta [this metadata] "Apply metadata to remote object refered to by rid and return new object.")
   ;; Write side
   (relay-cons [this elem] "Cons the object elem to the collection for rid")
   (relay-assoc [this k v] "Assoc the value v to the collection for rid at key k.")

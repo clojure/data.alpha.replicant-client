@@ -24,6 +24,8 @@
     (p/remote-dissoc remote this k))
   (relay-disj [this k]
     (p/remote-disj remote this k))
+  (relay-withmeta [this metadata]
+    (p/remote-withmeta remote this metadata))
 
   Object
   (toString [this]

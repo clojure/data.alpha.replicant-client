@@ -7,7 +7,7 @@
     [java.util Collection Map Map$Entry]
     [clojure.lang IDeref Seqable Associative ILookup Sequential Indexed Counted IFn
                   IMeta IPersistentCollection IPersistentStack IPersistentMap IPersistentSet
-                  IPersistentVector ArityException MapEquivalence IHashEq]))
+                  IPersistentVector ArityException MapEquivalence IHashEq IObj]))
 
 (set! *warn-on-reflection* true)
 
@@ -122,6 +122,10 @@
         (set! _hasheq he)
         _hasheq)))
 
+  IObj
+  (withMeta [this metadata]
+    (p/relay-withmeta relay metadata))
+  
   Object
   (hashCode [this]
     (if _hashcode
@@ -202,6 +206,10 @@
         (set! _hasheq he)
         _hasheq)))
 
+  IObj
+  (withMeta [this metadata]
+    (p/relay-withmeta relay metadata))
+  
   Object
   (hashCode [this]
     (if _hashcode
@@ -252,6 +260,10 @@
         (set! _hasheq he)
         _hasheq)))
 
+  IObj
+  (withMeta [this metadata]
+    (p/relay-withmeta relay metadata))
+  
   Object
   (hashCode [this]
     (if _hashcode
