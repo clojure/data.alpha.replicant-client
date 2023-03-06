@@ -5,6 +5,10 @@
            [java.io Writer]))
 
 (deftype Relay [rid remote]
+  IDeref
+  (deref [this]
+    (p/remote-fetch remote this))
+
   p/IRelay
   (relay-seq [this]
     (p/remote-seq remote this))
