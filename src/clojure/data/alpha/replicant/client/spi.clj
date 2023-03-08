@@ -6,7 +6,9 @@
 
 (defn- throw-unsupported-change-ex [op target]
   (throw (UnsupportedOperationException.
-          (str "Operation " op " not supported on RDS object, obtain a clone of the remote collection first."))))
+          (str "Operation " op
+               " not supported for RDS objects, instead "
+               "obtain a copy of the referent collection using the replicant clone function."))))
 
 (deftype Relay [rid remote]
   IDeref
