@@ -27,24 +27,9 @@
     "Fetch the hasheq of the object refered to by rid")
   (remote-hashcode
     [this rid]
-    "Fetch the hashCode of the object refered to by rid")
-  (remote-withmeta
-    [this rid metadata]
-    "Apply metadata to remote object refered to by rid and return new object."))
+    "Fetch the hashCode of the object refered to by rid"))
 
-(defprotocol IRemoteWrite
-  (remote-cons
-    [this rid elem]
-    "Cons the object elem to the collection for rid")
-  (remote-assoc
-    [this rid k v]
-    "Assoc the value v to the collection for rid at key k.")
-  (remote-dissoc
-    [this rid k]
-    "Dissoc the key k from the collection for rid.")
-  (remote-disj
-    [this rid k]
-    "Disj the key k from the collection for rid."))
+(defprotocol IRemoteWrite)
 
 (defprotocol IRelay
   ;; Read side
@@ -53,9 +38,9 @@
   (relay-apply [this args] "Apply remote object with args")
   (relay-hasheq [this] "Get hasheq of the object refered to by rid")
   (relay-hashcode [this] "Get hashCode of the object refered to by rid")
-  (relay-withmeta [this metadata] "Apply metadata to remote object refered to by rid and return new object.")
   ;; Write side
   (relay-cons [this elem] "Cons the object elem to the collection for rid")
   (relay-assoc [this k v] "Assoc the value v to the collection for rid at key k.")
   (relay-dissoc [this k] "Dissoc the key k from the collection for rid.")
-  (relay-disj [this k] "Disj the key k from the collection for rid."))
+  (relay-disj [this k] "Disj the key k from the collection for rid.")
+  (relay-withmeta [this metadata] "Apply metadata to remote object refered to by rid and return new object."))

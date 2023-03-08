@@ -11,6 +11,7 @@
 ;;  'r/vec #'vector-reader
 ;;  'r/map #'map-reader
 ;;  'r/set #'set-reader
+;;  'r/object #'object-reader
 ;;  'r/fn #'fn-reader}
 
 (def ^:dynamic *remote-client* nil)

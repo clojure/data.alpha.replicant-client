@@ -4,6 +4,10 @@
   (:import [clojure.lang IDeref]
            [java.io Writer]))
 
+(defn- throw-unsupported-change-ex [op target]
+  (throw (UnsupportedOperationException.
+          (str "Operation " op " not supported on RDS object, obtain a clone of the remote collection first."))))
+
 (deftype Relay [rid remote]
   IDeref
   (deref [this]
@@ -20,16 +24,12 @@
     (p/remote-hasheq remote this))
   (relay-hashcode [this]
     (p/remote-hashcode remote this))
-  (relay-cons [this elem]
-    (p/remote-cons remote this elem))
-  (relay-assoc [this k v]
-    (p/remote-assoc remote this k v))
-  (relay-dissoc [this k]
-    (p/remote-dissoc remote this k))
-  (relay-disj [this k]
-    (p/remote-disj remote this k))
-  (relay-withmeta [this metadata]
-    (p/remote-withmeta remote this metadata))
+  ;; Unsupported ops
+  (relay-cons [this _] (throw-unsupported-change-ex 'cons this))
+  (relay-assoc [this _ _] (throw-unsupported-change-ex 'assoc this))
+  (relay-dissoc [this _] (throw-unsupported-change-ex 'dissoc this))
+  (relay-disj [this _] (throw-unsupported-change-ex 'disjoin this))
+  (relay-withmeta [this _] (throw-unsupported-change-ex 'with-meta this))
 
   Object
   (toString [this]
@@ -51,16 +51,3 @@
   [rid remote]
   (->Relay rid remote))
 
-(comment
-
-  (require '[clojure.pprint :as pp])
-
-  (str
-   (binding []
-     (pp/with-pprint-dispatch pp/code-dispatch
-       (with-out-str
-         (pp/pprint
-          (relay (java.util.UUID/randomUUID) nil)
-          )))))
-
-)
