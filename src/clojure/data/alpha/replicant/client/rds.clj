@@ -122,10 +122,6 @@
         (set! _hasheq he)
         _hasheq)))
 
-  IObj
-  (withMeta [this metadata]
-    (p/relay-withmeta relay metadata))
-  
   Object
   (hashCode [this]
     (if _hashcode
@@ -205,10 +201,6 @@
       (let [he (p/relay-hasheq relay)]
         (set! _hasheq he)
         _hasheq)))
-
-  IObj
-  (withMeta [this metadata]
-    (p/relay-withmeta relay metadata))
   
   Object
   (hashCode [this]
@@ -260,10 +252,6 @@
         (set! _hasheq he)
         _hasheq)))
 
-  IObj
-  (withMeta [this metadata]
-    (p/relay-withmeta relay metadata))
-  
   Object
   (hashCode [this]
     (if _hashcode
@@ -285,9 +273,6 @@
 
 (deftype RemoteFn
   [relay]
-
-  IDeref
-  (deref [this] this)
 
   IFn
   (invoke [_] (p/relay-apply relay []))
