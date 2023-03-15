@@ -4,7 +4,7 @@
     [clojure.data.alpha.replicant.client.protocols :as p])
   (:import
     [java.io Writer]
-    [java.util Collection Map Map$Entry]
+    [java.util Collection List Map Map$Entry Set]
     [clojure.lang IDeref Seqable Associative ILookup Sequential Indexed Counted IFn
                   IMeta IPersistentCollection IPersistentStack IPersistentMap IPersistentSet
                   IPersistentVector ArityException MapEquivalence IHashEq IObj]))
@@ -39,6 +39,15 @@
                       (eq-fun (get y (first xkv) never-eq)
                               (second xkv)))
                     x))))))
+
+(defn- sequential-contains-all [coll objs]
+  (reduce (fn [_ elem]
+            (let [has (some #(= elem %) coll)]
+              (if has
+                (boolean has)
+                (reduced false))))
+          true
+          objs))
 
 (defn- rds-eq-set
   [x y]
@@ -111,8 +120,43 @@
       2 (.invoke this (nth args 0) (nth args 1))
       (throw (ArityException. (clojure.core/count args) "RemoteVector"))))
 
+  List
+  (contains [this obj]
+    (boolean (some #(= obj %) this)))
+  (containsAll [this objs]
+    (sequential-contains-all this objs))
+  (indexOf [this obj]
+    (reduce-kv (fn [_ index val]
+                 (if (= obj val)
+                   (reduced index)
+                   -1))
+               -1
+               (map #(clojure.lang.MapEntry. %2 %1)
+                    this
+                    (range))))
+  (lastIndexOf [this obj]
+    (reduce-kv (fn [lastio index val]
+                 (if (= obj val)
+                   index
+                   lastio))
+               -1
+               (map #(clojure.lang.MapEntry. %2 %1)
+                    this
+                    (range))))
+  (isEmpty [_]
+    (== 0 count))
+  (size [_] count)
+  (subList [this from to]
+    (subvec this from to))
+  (toArray [this]
+    (into-array Object this))
+
   Iterable
   (iterator [this] (clojure.lang.SeqIterator. (seq this)))
+
+  IObj
+  (withMeta [this metadata]
+    (p/relay-withmeta relay metadata))
 
   IHashEq
   (hasheq [this]
@@ -178,6 +222,19 @@
     (let [^Map$Entry e (.entryAt this k)]
       (when e
         (.getValue e))))
+  (getOrDefault [this k opt]
+    (let [^Map$Entry e (.entryAt this k)]
+      (if e
+        (.getValue e)
+        opt)))
+  (isEmpty [_]
+    (== 0 count))
+  (entrySet [this]
+    (set (seq this)))
+  (keySet [this]
+    (set (keys this)))
+  (values [this]
+    (vals this))
 
   IMeta
   (meta [this] metadata)
@@ -193,6 +250,10 @@
              1 (.invoke this (nth args 0))
              2 (.invoke this (nth args 0) (nth args 1))
              (throw (ArityException. (clojure.core/count args) "RemoteMap"))))
+
+  IObj
+  (withMeta [this metadata]
+    (p/relay-withmeta relay metadata))
 
   IHashEq
   (hasheq [this]
@@ -243,6 +304,18 @@
 
   IMeta
   (meta [this] metadata)
+
+  Set
+  (containsAll [this objs]
+    (sequential-contains-all this objs))
+  (isEmpty [_] (== 0 count))
+  (iterator [this] (clojure.lang.SeqIterator. (seq this)))
+  (toArray [this]
+    (into-array Object this))
+
+  IObj
+  (withMeta [this metadata]
+    (p/relay-withmeta relay metadata))
 
   IHashEq
   (hasheq [this]
