@@ -277,8 +277,7 @@
   [relay count metadata]
   (->RemoteMap relay count metadata nil nil))
 
-(deftype RemoteSet
-  [relay count metadata ^:volatile-mutable _hasheq ^:volatile-mutable _hashcode]
+(deftype RemoteSet [relay count metadata ^:volatile-mutable _hasheq ^:volatile-mutable _hashcode]
   clojure.lang.Seqable
   (seq [this] (p/relay-seq relay))
 
@@ -309,9 +308,18 @@
   (containsAll [this objs]
     (sequential-contains-all this objs))
   (isEmpty [_] (== 0 count))
-  (iterator [this] (clojure.lang.SeqIterator. (seq this)))
   (toArray [this]
     (into-array Object this))
+
+  Iterable
+  (iterator [this] (clojure.lang.SeqIterator. (seq this)))
+  
+  IFn
+  (invoke [this k] (.get this k))
+  (applyTo [this args]
+           (condp = (clojure.core/count args)
+             1 (.invoke this (nth args 0))
+             (throw (ArityException. (clojure.core/count args) "RemoteSet"))))
 
   IObj
   (withMeta [this metadata]
@@ -337,9 +345,6 @@
          (== (clojure.core/count this) (clojure.core/count other))
          (rds-eq-set this other))))
 
-  ;;IFn
-  ;;Iterable
-  
 (defn remote-set
   [relay count metadata]
   (->RemoteSet relay count metadata nil nil))
