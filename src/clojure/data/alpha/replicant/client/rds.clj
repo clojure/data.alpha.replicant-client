@@ -203,7 +203,9 @@
     (p/relay-cons relay elem))
 
   ILookup
-  (valAt [this k] (val (.entryAt this k)))
+  (valAt [this k]
+    (when-let [e (.entryAt this k)]
+      (val e)))
 
   Counted
 
