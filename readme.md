@@ -1,6 +1,6 @@
 # replicant-client
 
-A Clojure a library providing client-side implementations of Clojure datastructures served by [replicant-server](https://github.com/clojure/replicant-server).
+A Clojure a library providing client-side implementations of Clojure datastructures served by [replicant-server](https://github.com/clojure/data.alpha.replicant-server).
 
 ## Rationale
 
@@ -9,7 +9,6 @@ While the ability to connect to Clojure REPLs over a wire is a powerful lever fo
 ## Docs
 
 * [API](https://clojure.github.io/replicant-client)
-* [Reference](https://clojure.org/reference/replicant)
 
 # Release Information
 
@@ -20,14 +19,14 @@ Latest release:
 As a git dep:
 
 ```clojure
-io.github.clojure/replicant-client {:git/tag "vTODO" :git/sha "TODO"}
+io.github.clojure/data.alpha.replicant-client {:git/tag "vTODO" :git/sha "TODO"}
 ``` 
 
 # Developer Information
 
-[![Tests](https://github.com/clojure/replicant-client/actions/workflows/ci.yml/badge.svg)](https://github.com/clojure/replicant-client/actions/workflows/ci.yml)
+[![Tests](https://github.com/clojure/data.alpha.replicant-client/actions/workflows/ci.yml/badge.svg)](https://github.com/clojure/data.alpha.replicant-client/actions/workflows/ci.yml)
 
-* [GitHub project](https://github.com/clojure/replicant-client)
+* [GitHub project](https://github.com/clojure/data.alpha.replicant-client)
 * [How to contribute](https://clojure.org/community/contributing)
 * [Bug Tracker](https://clojure.atlassian.net/browse/RCLIENT)
 
