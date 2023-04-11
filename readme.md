@@ -19,7 +19,7 @@ Latest release:
 As a git dep:
 
 ```clojure
-io.github.clojure/data.alpha.replicant-client {:git/tag "vTODO" :git/sha "TODO"}
+io.github.clojure/data.alpha.replicant-client {:git/tag "v0.1.0" :git/sha "0a7b34b"}
 ``` 
 
 # Developer Information
