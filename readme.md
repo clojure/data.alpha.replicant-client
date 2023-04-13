@@ -1,6 +1,8 @@
 # replicant-client
 
-A Clojure a library providing client-side implementations of Clojure datastructures served by [replicant-server](https://github.com/clojure/data.alpha.replicant-server).
+A Clojure a library providing client-side implementations of Clojure data-structures served by [replicant-server](https://github.com/clojure/data.alpha.replicant-server).
+
+This software is considered an alpha release and subject to change.
 
 ## Rationale
 
@@ -16,7 +18,7 @@ Latest release:
 
 [deps.edn](https://clojure.org/reference/deps_and_cli) dependency information:
 
-As a git dep:
+The replicant-client library is intended for use as a git dep:
 
 ```clojure
 io.github.clojure/data.alpha.replicant-client {:git/tag "v0.1.0" :git/sha "0a7b34b"}
@@ -28,7 +30,7 @@ io.github.clojure/data.alpha.replicant-client {:git/tag "v0.1.0" :git/sha "0a7b3
 
 * [GitHub project](https://github.com/clojure/data.alpha.replicant-client)
 * [How to contribute](https://clojure.org/community/contributing)
-* [Bug Tracker](https://clojure.atlassian.net/browse/RCLIENT)
+* [Bug Tracker](https://clojure.atlassian.net/browse/DRDS)
 
 # Copyright and License
 
