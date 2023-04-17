@@ -4,10 +4,6 @@ A Clojure a library providing client-side implementations of Clojure data-struct
 
 This software is considered an alpha release and subject to change.
 
-## Rationale
-
-While the ability to connect to Clojure REPLs over a wire is a powerful lever for programmers, the transport of data-structures can bog down an active connection. Replicant works to avoid sending data over the wire until it's requested. "Large" data structures (via length or depth) are "remotified" - stored in a cache on the server, passed as a remote reference. When more data is needed, replicant-client interacts with replicant-server to retrieve more data.
-
 ## Docs
 
 * [API](https://clojure.github.io/replicant-client)
@@ -25,8 +21,6 @@ io.github.clojure/data.alpha.replicant-client {:git/tag "v0.1.0" :git/sha "0a7b3
 ``` 
 
 # Developer Information
-
-[![Tests](https://github.com/clojure/data.alpha.replicant-client/actions/workflows/ci.yml/badge.svg)](https://github.com/clojure/data.alpha.replicant-client/actions/workflows/ci.yml)
 
 * [GitHub project](https://github.com/clojure/data.alpha.replicant-client)
 * [How to contribute](https://clojure.org/community/contributing)
