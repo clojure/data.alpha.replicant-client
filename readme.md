@@ -1,6 +1,6 @@
 # replicant-client
 
-A Clojure a library providing client-side implementations of Clojure data-structures served by [replicant-server](https://github.com/clojure/data.alpha.replicant-server).
+A Clojure library providing client-side implementations of Clojure data-structures served by [replicant-server](https://github.com/clojure/data.alpha.replicant-server).
 
 This software is considered an alpha release and subject to change.
 
