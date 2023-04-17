@@ -3,10 +3,21 @@
  {org.clojure/clojure {:mvn/version "1.12.0-alpha2"}}
 
  :aliases
- {:test {:extra-paths ["test"]
-         :extra-deps {io.github.cognitect-labs/test-runner
-                      {:git/url "https://github.com/cognitect-labs/test-runner.git"
-                       :sha "9e35c979860c75555adaff7600070c60004a0f44"}}
-         :main-opts ["-m" "cognitect.test-runner"]
-         :exec-fn cognitect.test-runner.api/test}}
+ {:test
+  {:extra-paths ["test"]
+   :extra-deps {io.github.cognitect-labs/test-runner
+                {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                 :sha "9e35c979860c75555adaff7600070c60004a0f44"}}
+   :main-opts ["-m" "cognitect.test-runner"]
+   :exec-fn cognitect.test-runner.api/test}
+
+  :quickdoc
+  {:deps {org.babashka/cli {:mvn/version "0.4.36"}
+          io.github.borkdude/quickdoc
+          {:deps/root "jvm"
+           :git/sha "c5320cbe311b651a60b47f4d00d7e8ab63291b6e"}}
+   :main-opts ["-m" "babashka.cli.exec" "quickdoc.api" "quickdoc"]
+   :exec-args {:github/repo "https://github.com/clojure/data.alpha.replicant-client"
+               :git/branch "main"
+               :source-paths ["src/clojure/data/alpha/replicant/client.clj"]}}}
  }

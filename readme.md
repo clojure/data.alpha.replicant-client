@@ -6,7 +6,7 @@ This software is considered an alpha release and subject to change.
 
 ## Docs
 
-* [API](https://clojure.github.io/replicant-client)
+* [API.md](API.md)
 
 # Release Information
 
