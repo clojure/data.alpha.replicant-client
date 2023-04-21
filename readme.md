@@ -17,7 +17,7 @@ Latest release:
 The replicant-client library is intended for use as a git dep:
 
 ```clojure
-io.github.clojure/data.alpha.replicant-client {:git/tag "v0.1.0" :git/sha "0a7b34b"}
+io.github.clojure/data.alpha.replicant-client {:git/tag "v2023.04.20.01" :git/sha "bcabb7b"}
 ``` 
 
 # Developer Information
